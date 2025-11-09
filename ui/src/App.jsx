@@ -7,6 +7,8 @@ import ExplanationsPage from './pages/ExplanationsPage'
 import PaymentPage from './pages/PaymentPage'
 import PaymentSuccessPage from './pages/PaymentSuccessPage'
 import PaidExamSelectionPage from './pages/PaidExamSelectionPage'
+import AdminLoginPage from './pages/AdminLoginPage'
+import AdminSalesPage from './pages/AdminSalesPage'
 import AdminUploadPage from './pages/AdminUploadPage'
 import './App.css'
 
@@ -23,6 +25,8 @@ function App() {
         <Route path="/explanations/:attemptId" element={<ExplanationsPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/payment/success" element={<PaymentSuccessPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/sales" element={<AdminSalesPage />} />
         <Route path="/admin/upload" element={<AdminUploadPage />} />
       </Routes>
     </BrowserRouter>

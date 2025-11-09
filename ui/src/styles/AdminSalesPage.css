@@ -1,0 +1,274 @@
+/* AdminSalesPage 전체 레이아웃 */
+.admin-sales-page {
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 2rem 1rem;
+}
+
+.admin-sales-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 헤더 */
+.admin-sales-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed #d0d0d0;
+}
+
+.sales-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #213547;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.btn-logout {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 2px solid #213547;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #213547;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #f0f0f0;
+}
+
+.btn-logout:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 요약 섹션 */
+.sales-summary {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #856404;
+}
+
+/* 구분선 */
+.divider {
+  height: 1px;
+  background-color: #d0d0d0;
+  margin: 1.5rem 0;
+}
+
+/* 검색 영역 */
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #d0d0d0;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #213547;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  min-width: 250px;
+  max-width: 100%;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* 테이블 컨테이너 */
+.sales-table-container {
+  overflow-x: auto;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.sales-table thead {
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.sales-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #213547;
+  font-size: 1rem;
+}
+
+.sales-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sales-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.sales-table td {
+  padding: 1rem;
+  font-size: 1rem;
+  color: #213547;
+}
+
+/* 전화번호 스타일 (빨간색) */
+.sales-table td.phone-number {
+  color: #ef5350;
+}
+
+/* 결제일, 종료일 스타일 (주황/갈색) */
+.sales-table td.payment-date,
+.sales-table td.end-date {
+  color: #856404;
+}
+
+/* 데이터 없음 */
+.sales-table td.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+}
+
+/* 더보기 표시 */
+.more-indicator {
+  text-align: center;
+  padding: 0.5rem;
+  color: #999;
+  font-size: 1.2rem;
+}
+
+/* 로딩 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .admin-sales-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .admin-sales-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .sales-title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .btn-logout {
+    width: 100%;
+  }
+
+  .sales-summary {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .summary-item {
+    padding: 0.75rem;
+  }
+
+  .summary-value {
+    font-size: 1.3rem;
+  }
+
+  .search-container {
+    justify-content: stretch;
+  }
+
+  .search-input {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .sales-table {
+    font-size: 0.9rem;
+  }
+
+  .sales-table th,
+  .sales-table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .sales-table th:nth-child(2),
+  .sales-table td:nth-child(2) {
+    word-break: break-all;
+  }
+}
+
+/* 작은 화면 */
+@media (max-width: 480px) {
+  .admin-sales-page {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .sales-title {
+    font-size: 1.3rem;
+  }
+
+  .summary-value {
+    font-size: 1.2rem;
+  }
+
+  .sales-table {
+    font-size: 0.85rem;
+  }
+
+  .sales-table th,
+  .sales-table td {
+    padding: 0.5rem 0.25rem;
+  }
+}
+

@@ -144,6 +144,23 @@ function PaymentPage() {
           throw new Error('결제 정보 저장 확인 실패')
         }
         console.log('저장된 결제 정보 확인:', savedInfo)
+        
+        // 관리자 판매 현황용 - 모든 결제 정보 배열에 추가
+        try {
+          const allPayments = JSON.parse(localStorage.getItem('carecbt_all_payments') || '[]')
+          // 중복 체크 (같은 전화번호와 결제일)
+          const isDuplicate = allPayments.some(
+            (p) => p.phone === paymentInfo.phone && p.paidAt === paymentInfo.paidAt
+          )
+          if (!isDuplicate) {
+            allPayments.push(paymentInfo)
+            localStorage.setItem('carecbt_all_payments', JSON.stringify(allPayments))
+            console.log('결제 목록에 추가 완료')
+          }
+        } catch (e) {
+          console.error('결제 목록 저장 오류:', e)
+          // 에러가 나도 결제 진행은 계속
+        }
       } catch (saveError) {
         console.error('결제 정보 저장 오류:', saveError)
         throw new Error('결제 정보 저장에 실패했습니다: ' + saveError.message)
