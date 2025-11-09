@@ -140,18 +140,44 @@ export const seedInitialData = async () => {
  */
 export const testConnection = async () => {
   try {
-    const result = await pool.query('SELECT NOW()')
+    console.log('   Attempting to connect to database...')
+    const result = await pool.query('SELECT NOW() as current_time, version() as db_version')
     console.log('✅ Database connection test successful')
-    console.log('📅 Database time:', result.rows[0].now)
+    console.log('📅 Database time:', result.rows[0].current_time)
+    console.log('📦 Database version:', result.rows[0].db_version.split(',')[0])
     return true
   } catch (error) {
-    console.error('❌ Database connection test failed:', error.message)
+    console.error('❌ Database connection test failed')
+    console.error('   Error message:', error.message)
+    
     if (error.code) {
       console.error('   Error code:', error.code)
     }
-    if (error.message.includes('SSL')) {
-      console.error('   💡 Tip: Render.com databases require SSL. Check your DATABASE_URL.')
+    
+    if (error.message.includes('SSL') || error.message.includes('ssl') || error.code === '28000') {
+      console.error('   💡 Tip: Render.com databases require SSL. Check your DATABASE_URL SSL settings.')
     }
+    
+    if (error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
+      console.error('   💡 Tip: Cannot resolve database host. Check DATABASE_URL hostname.')
+    }
+    
+    if (error.code === 'ECONNREFUSED') {
+      console.error('   💡 Tip: Connection refused. Check if database is running and accessible.')
+    }
+    
+    if (error.code === '28P01' || error.message.includes('password authentication failed')) {
+      console.error('   💡 Tip: Authentication failed. Check DATABASE_URL username and password.')
+    }
+    
+    if (error.code === '3D000' || error.message.includes('database') && error.message.includes('does not exist')) {
+      console.error('   💡 Tip: Database does not exist. Check DATABASE_URL database name.')
+    }
+    
+    if (error.stack) {
+      console.error('   Stack trace:', error.stack.split('\n').slice(0, 5).join('\n'))
+    }
+    
     return false
   }
 }

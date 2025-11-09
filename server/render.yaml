@@ -7,8 +7,10 @@ services:
     name: carecbt-api
     env: node
     plan: free
-    buildCommand: npm install
+    region: singapore
+    buildCommand: npm install --production
     startCommand: npm start
+    healthCheckPath: /healthz
     envVars:
       - key: NODE_ENV
         value: production
@@ -18,6 +20,7 @@ services:
         fromDatabase:
           name: carecbt-db
           property: connectionString
+          # Internal Database URL 사용 (서비스 간 통신용)
 
   # 프런트엔드 Static Site
   - type: web
