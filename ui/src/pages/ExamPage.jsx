@@ -67,12 +67,14 @@ function ExamPage() {
         setIsLoading(true)
         setError(null)
 
-        // 유료 시험 여부 확인 (URL에서 /paid로 접근했는지, 또는 결제 정보가 있는지)
-        const isPaidExam = window.location.pathname.includes('/paid') || storage.isPaidUser()
+        // 유료 시험 여부 확인 (URL 경로만으로 판단)
+        // /exam 경로는 항상 무료 (20문항)
+        // /exam/paid 경로만 유료 (80문항)
+        const isPaidExam = window.location.pathname.includes('/paid')
         const questionCount = isPaidExam ? 80 : 20 // 유료는 80문항, 무료는 20문항
 
-        // 유료 시험 여부 확인
-        if (window.location.pathname.includes('/paid')) {
+        // 유료 시험 접근 시 결제 여부 확인
+        if (isPaidExam) {
           if (!storage.isPaidUser()) {
             setError('유료 모의고사를 이용하시려면 먼저 구매해주세요.')
             setIsLoading(false)
@@ -101,7 +103,8 @@ function ExamPage() {
         logger.error('시험 초기화 오류:', err)
         setError('시험을 불러오는 중 오류가 발생했습니다.')
         // 백엔드가 없는 경우 mock 데이터 사용
-        const isPaidExam = window.location.pathname.includes('/paid') || storage.isPaidUser()
+        // URL 경로만으로 판단 (무료는 /exam, 유료는 /exam/paid)
+        const isPaidExam = window.location.pathname.includes('/paid')
         const questionCount = isPaidExam ? 80 : 20
         const mockAttempt = { id: `mock-attempt-${isPaidExam ? 'paid' : 'free'}-1`, exam_id: 1 }
         const mockQuestions = Array.from({ length: questionCount }, (_, i) => ({

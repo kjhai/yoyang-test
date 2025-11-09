@@ -48,9 +48,11 @@ function LandingPage() {
         )}
 
         <div className="button-group">
-          <button className="start-button" onClick={handleStartFreeExam}>
-            20문항 무료로 시작하기
-          </button>
+          {!isPaidUser && (
+            <button className="start-button" onClick={handleStartFreeExam}>
+              20문항 무료로 시작하기
+            </button>
+          )}
           
           {isPaidUser ? (
             <button className="start-button paid-button" onClick={handleStartPaidExam}>
