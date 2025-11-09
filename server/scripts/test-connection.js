@@ -29,11 +29,17 @@ const main = async () => {
   
   console.log('📋 Connection settings:')
   if (process.env.DATABASE_URL) {
-    const url = new URL(process.env.DATABASE_URL)
-    console.log('   Host:', url.hostname)
-    console.log('   Port:', url.port || '5432')
-    console.log('   Database:', url.pathname.replace('/', ''))
-    console.log('   User:', url.username)
+    try {
+      const url = new URL(process.env.DATABASE_URL)
+      console.log('   Host:', url.hostname)
+      console.log('   Port:', url.port || '5432')
+      console.log('   Database:', url.pathname.replace('/', ''))
+      console.log('   User:', url.username)
+      console.log('   SSL:', process.env.DATABASE_URL.includes('render.com') ? 'required' : 'optional')
+    } catch (error) {
+      console.log('   Connection String: *** (unable to parse)')
+      console.log('   Error:', error.message)
+    }
   } else {
     console.log('   Host:', process.env.DB_HOST || 'localhost')
     console.log('   Port:', process.env.DB_PORT || '5432')

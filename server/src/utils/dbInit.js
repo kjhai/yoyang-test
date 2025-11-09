@@ -146,6 +146,12 @@ export const testConnection = async () => {
     return true
   } catch (error) {
     console.error('❌ Database connection test failed:', error.message)
+    if (error.code) {
+      console.error('   Error code:', error.code)
+    }
+    if (error.message.includes('SSL')) {
+      console.error('   💡 Tip: Render.com databases require SSL. Check your DATABASE_URL.')
+    }
     return false
   }
 }

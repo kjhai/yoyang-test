@@ -71,12 +71,28 @@ app.use((err, req, res, next) => {
 // 서버 시작
 const startServer = async () => {
   try {
+    // DATABASE_URL 확인
+    if (!process.env.DATABASE_URL && !process.env.DB_NAME) {
+      console.error('❌ DATABASE_URL or DB_NAME is not set!')
+      console.error('Please set DATABASE_URL environment variable in Render.com dashboard.')
+      console.error('Go to your service → Environment → Add Environment Variable')
+      console.error('Name: DATABASE_URL')
+      console.error('Value: (Get from your PostgreSQL database → Connections → Internal Database URL)')
+      process.exit(1)
+    }
+    
     // 데이터베이스 연결 테스트
     console.log('🔌 Testing database connection...')
     const dbConnected = await testConnection()
     
     if (!dbConnected) {
-      console.error('❌ Database connection failed. Please check your DATABASE_URL in .env file.')
+      console.error('❌ Database connection failed.')
+      console.error('')
+      console.error('Please check:')
+      console.error('  1. DATABASE_URL is set correctly in Render.com environment variables')
+      console.error('  2. Use Internal Database URL (not External) for Render.com services')
+      console.error('  3. Database is running and accessible')
+      console.error('  4. SSL is enabled for Render.com databases')
       process.exit(1)
     }
     
@@ -86,17 +102,25 @@ const startServer = async () => {
       await initDatabase()
     } catch (error) {
       console.warn('⚠️  Database initialization warning:', error.message)
-      console.log('ℹ️  Continuing server startup...')
+      // 테이블이 이미 존재하는 경우는 경고만 출력하고 계속 진행
+      if (error.message.includes('already exists')) {
+        console.log('ℹ️  Tables already exist, skipping initialization...')
+      } else {
+        console.log('ℹ️  Continuing server startup...')
+      }
     }
     
     // 서버 시작
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on http://localhost:${PORT}`)
+      console.log(`🚀 Server is running on port ${PORT}`)
       console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`)
       console.log(`🗄️  Database: ${process.env.DATABASE_URL ? 'configured' : 'not configured'}`)
     })
   } catch (error) {
     console.error('❌ Failed to start server:', error)
+    if (error.message) {
+      console.error('   Error:', error.message)
+    }
     process.exit(1)
   }
 }

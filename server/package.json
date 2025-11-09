@@ -8,6 +8,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "init-db": "node scripts/init-db.js",
+    "init-render-db": "node scripts/init-render-db.js",
     "test-connection": "node scripts/test-connection.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
