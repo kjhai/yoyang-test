@@ -1,0 +1,57 @@
+/* 전역 앱 스타일 */
+.app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 공통 컨테이너 */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* 공통 버튼 스타일 */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #667eea;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #213547;
+}
+
+.btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* 모바일 우선 */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+}
