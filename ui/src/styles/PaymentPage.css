@@ -1,0 +1,427 @@
+/* PaymentPage 전체 레이아웃 */
+.payment-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 2rem 1rem;
+}
+
+.payment-container {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 결제 금액 및 안내 영역 */
+.payment-info-section {
+  background-color: #ffffff;
+  border: 2px solid #213547;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.payment-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #213547;
+  margin-bottom: 1.5rem;
+}
+
+.payment-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.amount-label {
+  font-size: 1rem;
+  color: #666;
+}
+
+.amount-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #213547;
+}
+
+.payment-notice {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.payment-notice p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.payment-notice p strong {
+  color: #213547;
+  font-weight: bold;
+}
+
+.notice-sub {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+}
+
+.notice-sub a {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.notice-sub a:hover {
+  text-decoration: underline;
+}
+
+/* 결제 정보 입력 폼 */
+.payment-form {
+  background-color: #ffffff;
+  border: 2px solid #213547;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #213547;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #213547;
+  margin-bottom: 0.5rem;
+}
+
+.label-description {
+  font-size: 0.875rem;
+  font-weight: normal;
+  color: #666;
+  margin-left: 0.25rem;
+}
+
+.required {
+  color: #ef5350;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid #d0d0d0;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #213547;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.form-input.error {
+  border-color: #ef5350;
+}
+
+.form-input::placeholder {
+  color: #999;
+}
+
+.error-message {
+  display: block;
+  font-size: 0.875rem;
+  color: #ef5350;
+  margin-top: 0.25rem;
+}
+
+.input-help {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* 이용약관 및 개인정보 처리 방침 동의 */
+.agreement-section {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.agreement-item {
+  margin-bottom: 1rem;
+}
+
+.agreement-item:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #213547;
+  line-height: 1.6;
+}
+
+.checkbox-input {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.75rem;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-label span {
+  flex: 1;
+}
+
+.agreement-link {
+  color: #667eea;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.agreement-link:hover {
+  color: #5568d3;
+}
+
+.privacy-notice {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+.privacy-notice p {
+  margin: 0.5rem 0;
+}
+
+.privacy-notice p strong {
+  color: #213547;
+  font-weight: bold;
+}
+
+.privacy-notice ul {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.privacy-notice li {
+  margin: 0.5rem 0;
+}
+
+/* 버튼 영역 */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-cancel,
+.btn-submit {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: 2px solid #213547;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  touch-action: manipulation;
+  min-height: 48px;
+}
+
+.btn-cancel {
+  background-color: #ffffff;
+  color: #213547;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.btn-submit {
+  background-color: #667eea;
+  color: #ffffff;
+  border-color: #667eea;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cancel:active:not(:disabled),
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-cancel:disabled,
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancel:focus-visible,
+.btn-submit:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .payment-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .payment-container {
+    gap: 1.5rem;
+  }
+
+  .payment-info-section {
+    padding: 1.5rem;
+  }
+
+  .payment-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .payment-amount {
+    padding: 1.25rem;
+  }
+
+  .amount-value {
+    font-size: 2rem;
+  }
+
+  .payment-notice {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+  }
+
+  .payment-notice p {
+    font-size: 0.9rem;
+  }
+
+  .notice-sub {
+    font-size: 0.85rem;
+  }
+
+  .agreement-section {
+    padding: 1.25rem;
+  }
+
+  .privacy-notice {
+    padding: 0.875rem;
+    font-size: 0.85rem;
+  }
+
+  .checkbox-input {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5rem;
+  }
+
+  .payment-form {
+    padding: 1.5rem;
+  }
+
+  .form-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-input {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* 작은 화면 */
+@media (max-width: 480px) {
+  .payment-page {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .payment-info-section,
+  .payment-form {
+    padding: 1.25rem;
+  }
+
+  .payment-title {
+    font-size: 1.3rem;
+  }
+
+  .amount-value {
+    font-size: 1.75rem;
+  }
+
+  .form-title {
+    font-size: 1.2rem;
+  }
+}
+

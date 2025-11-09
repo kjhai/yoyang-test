@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import useExamStore from '../stores/examStore'
 import { examAPI } from '../utils/api'
 import { storage } from '../utils/localStorage'
@@ -7,6 +7,8 @@ import '../styles/ExamPage.css'
 
 function ExamPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const examNumber = location.state?.examNumber || null
   const {
     currentAttempt,
     questions,
@@ -64,7 +66,25 @@ function ExamPage() {
         setIsLoading(true)
         setError(null)
 
-        // 무료 시험 정보 가져오기
+        // 유료 시험 여부 확인 (URL에서 /paid로 접근했는지, 또는 결제 정보가 있는지)
+        const isPaidExam = window.location.pathname.includes('/paid') || storage.isPaidUser()
+        const questionCount = isPaidExam ? 80 : 20 // 유료는 80문항, 무료는 20문항
+
+        // 유료 시험 여부 확인
+        if (window.location.pathname.includes('/paid')) {
+          if (!storage.isPaidUser()) {
+            setError('유료 모의고사를 이용하시려면 먼저 구매해주세요.')
+            setIsLoading(false)
+            return
+          }
+          // examNumber가 없으면 선택 페이지로 리다이렉트
+          if (!examNumber) {
+            navigate('/exam/paid/select')
+            return
+          }
+        }
+
+        // 무료 시험 정보 가져오기 (유료도 같은 API 사용, 백엔드에서 구분)
         const exam = await examAPI.getFreeExam()
 
         // attempt 생성
@@ -80,8 +100,10 @@ function ExamPage() {
         console.error('시험 초기화 오류:', err)
         setError('시험을 불러오는 중 오류가 발생했습니다.')
         // 백엔드가 없는 경우 mock 데이터 사용
-        const mockAttempt = { id: 'mock-attempt-1', exam_id: 1 }
-        const mockQuestions = Array.from({ length: 20 }, (_, i) => ({
+        const isPaidExam = window.location.pathname.includes('/paid') || storage.isPaidUser()
+        const questionCount = isPaidExam ? 80 : 20
+        const mockAttempt = { id: `mock-attempt-${isPaidExam ? 'paid' : 'free'}-1`, exam_id: 1 }
+        const mockQuestions = Array.from({ length: questionCount }, (_, i) => ({
           id: `q-${i + 1}`,
           question_id: `q-${i + 1}`,
           stem: `${i + 1}번 문제입니다. 다음 중 올바른 답을 선택하세요.`,
@@ -192,11 +214,42 @@ function ExamPage() {
     if (!confirmed) return
 
     try {
-      const result = await examAPI.submitAttempt(currentAttempt.id)
+      // 서버에 제출 시도
+      await examAPI.submitAttempt(currentAttempt.id)
+      
+      // 유료 시험인 경우 완료된 모의고사 번호 저장
+      if (examNumber && storage.isPaidUser()) {
+        const completed = JSON.parse(localStorage.getItem('carecbt_completed_exams') || '[]')
+        if (!completed.includes(examNumber)) {
+          completed.push(examNumber)
+          localStorage.setItem('carecbt_completed_exams', JSON.stringify(completed))
+        }
+      }
+      
       navigate(`/result/${currentAttempt.id}`)
     } catch (err) {
       console.error('제출 오류:', err)
-      alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.')
+      // 백엔드가 없는 경우에도 결과 페이지로 이동 (ResultPage에서 mock 데이터 사용)
+      // 로컬 스토리지에 제출 상태 저장
+      const submitData = {
+        submitted: true,
+        submittedAt: new Date().toISOString(),
+      }
+      localStorage.setItem(
+        `exam_submitted_${currentAttempt.id}`,
+        JSON.stringify(submitData)
+      )
+      
+      // 유료 시험인 경우 완료된 모의고사 번호 저장
+      if (examNumber && storage.isPaidUser()) {
+        const completed = JSON.parse(localStorage.getItem('carecbt_completed_exams') || '[]')
+        if (!completed.includes(examNumber)) {
+          completed.push(examNumber)
+          localStorage.setItem('carecbt_completed_exams', JSON.stringify(completed))
+        }
+      }
+      
+      navigate(`/result/${currentAttempt.id}`)
     }
   }
 
@@ -224,13 +277,46 @@ function ExamPage() {
     )
   }
 
+  // 홈으로 이동
+  const handleGoHome = () => {
+    navigate('/')
+  }
+
   return (
     <div className="exam-page">
       {/* 헤더 영역 (헤더 + 진행바) - 고정 */}
       <div className="exam-header-wrapper">
         <header className="exam-header">
-          <div className="logo-placeholder">로고</div>
-          <h1 className="site-title">CareCBT</h1>
+          <div 
+            className="logo-placeholder" 
+            onClick={handleGoHome}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                handleGoHome()
+              }
+            }}
+            aria-label="홈으로 이동"
+          >
+            로고
+          </div>
+          <h1 
+            className="site-title"
+            onClick={handleGoHome}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                handleGoHome()
+              }
+            }}
+            aria-label="홈으로 이동"
+          >
+            CareCBT
+          </h1>
         </header>
 
         {/* 진행바 */}

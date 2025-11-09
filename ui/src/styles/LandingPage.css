@@ -33,6 +33,15 @@
   opacity: 0.95;
 }
 
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
 .start-button {
   background: white;
   color: #667eea;
@@ -43,6 +52,7 @@
   border-radius: 50px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
 }
 
 .start-button:hover {
@@ -52,6 +62,45 @@
 
 .start-button:active {
   transform: translateY(0);
+}
+
+.paid-button {
+  background: #4caf50;
+  color: white;
+}
+
+.paid-button:hover {
+  background: #45a049;
+  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+}
+
+.purchase-button {
+  background: #ff9800;
+  color: white;
+}
+
+.purchase-button:hover {
+  background: #f57c00;
+  box-shadow: 0 10px 25px rgba(255, 152, 0, 0.3);
+}
+
+.paid-user-notice {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.paid-user-notice p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: white;
+}
+
+.expires-info {
+  font-size: 0.9rem !important;
+  opacity: 0.9;
 }
 
 /* 모바일 우선 반응형 */

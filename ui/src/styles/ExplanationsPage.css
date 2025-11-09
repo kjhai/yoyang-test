@@ -1,5 +1,5 @@
-/* ExamPage 전체 레이아웃 */
-.exam-page {
+/* ExplanationsPage 스타일 - ExamPage와 유사하지만 읽기 전용 */
+.explanations-page {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -123,9 +123,22 @@
 .question-stem {
   font-size: 1.25rem;
   line-height: 1.8;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: #213547;
   word-break: keep-all;
+}
+
+/* 오답 배지 */
+.wrong-answer-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #ffebee;
+  color: #c62828;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #ef5350;
 }
 
 /* 보기 컨테이너 */
@@ -142,35 +155,26 @@
   padding: 0.75rem 0;
   border: none;
   border-radius: 0;
-  cursor: pointer;
-  transition: all 0.2s;
   background-color: transparent;
   min-height: auto;
-  touch-action: manipulation;
-}
-
-.option-item:hover {
-  background-color: #f8f9ff;
-}
-
-.option-item:active {
-  transform: scale(0.98);
-}
-
-.option-item:focus-visible {
-  outline: 3px solid #667eea;
-  outline-offset: 2px;
-  border-radius: 4px;
+  position: relative;
+  cursor: default;
 }
 
 .option-item.selected {
-  background-color: transparent;
+  background-color: #fff3e0;
 }
 
-/* 선택된 상태: 번호 검은색 배경 */
-.option-item.selected .option-number {
-  background-color: #213547;
-  color: #ffffff;
+.option-item.correct-answer {
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  padding-left: 0.5rem;
+}
+
+.option-item.wrong-answer {
+  background-color: #ffebee;
+  border-left: 4px solid #ef5350;
+  padding-left: 0.5rem;
 }
 
 .option-number {
@@ -187,7 +191,21 @@
   color: #213547;
   margin-right: 1rem;
   flex-shrink: 0;
-  transition: all 0.2s;
+}
+
+.option-item.selected .option-number {
+  background-color: #ff9800;
+  color: #ffffff;
+}
+
+.option-item.correct-answer .option-number {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+.option-item.wrong-answer .option-number {
+  background-color: #ef5350;
+  color: #ffffff;
 }
 
 .option-text {
@@ -197,6 +215,68 @@
   color: #213547;
   word-break: keep-all;
   padding-top: 0.75rem;
+}
+
+/* 배지 */
+.wrong-badge,
+.correct-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.wrong-badge {
+  background-color: #ef5350;
+  color: #ffffff;
+}
+
+.correct-badge {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+/* 정답 및 해설 영역 */
+.explanation-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  border: 2px solid #213547;
+}
+
+.explanation-header {
+  margin-bottom: 1rem;
+}
+
+.explanation-header h3 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #213547;
+  margin: 0;
+}
+
+.correct-answer-display {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4caf50;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+}
+
+.explanation-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #213547;
+  word-break: keep-all;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 4px;
 }
 
 /* 푸터 네비게이션 - 고정 */
@@ -242,66 +322,55 @@
   background-color: #f5f5f5;
 }
 
-.submit-button {
-  background-color: #667eea;
-  color: #ffffff;
-  border-color: #667eea;
+.nav-button.back-button {
+  background-color: #f5f5f5;
 }
 
-.submit-button:hover:not(:disabled) {
-  background-color: #5568d3;
+.nav-button.back-button:hover {
+  background-color: #e0e0e0;
 }
 
-/* 토스트 메시지 */
-.toast {
-  position: fixed;
-  bottom: 90px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #213547;
-  color: #ffffff;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  z-index: 1000;
-  animation: slideUp 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+.nav-button:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
 }
 
 /* 로딩 및 에러 상태 */
 .loading,
 .error {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   font-size: 1.2rem;
   padding: 2rem;
   text-align: center;
+  gap: 1rem;
 }
 
 .error {
   color: #d32f2f;
 }
 
+.back-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid #213547;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #213547;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background-color: #f0f0f0;
+}
+
 /* 모바일 최적화 */
 @media (max-width: 768px) {
-  .exam-header-wrapper {
-    /* 모바일에서도 고정 유지 */
-  }
-
   .exam-header {
     padding: 0.75rem;
   }
@@ -327,7 +396,7 @@
 
   .question-stem {
     font-size: 1.1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
 
   .option-item {
@@ -347,6 +416,25 @@
     padding-top: 0.5rem;
   }
 
+  .explanation-section {
+    padding: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .explanation-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .correct-answer-display {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .explanation-text {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+
   .exam-footer {
     padding: 0.75rem;
     gap: 0.5rem;
@@ -357,38 +445,10 @@
     font-size: 1rem;
   }
 
-  .toast {
-    bottom: 75px;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.85rem;
-  }
-}
-
-/* 접근성: 키보드 포커스 */
-.option-item:focus-visible {
-  outline: 3px solid #667eea;
-  outline-offset: 2px;
-}
-
-.nav-button:focus-visible {
-  outline: 3px solid #667eea;
-  outline-offset: 2px;
-}
-
-/* 큰 화면 최적화 */
-@media (min-width: 1024px) {
-  .exam-content {
-    max-width: 800px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .question-stem {
-    font-size: 1.3rem;
-  }
-
-  .option-text {
-    font-size: 1.15rem;
+  .wrong-badge,
+  .correct-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
   }
 }
 

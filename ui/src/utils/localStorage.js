@@ -101,5 +101,61 @@ export const storage = {
       console.error('데이터 초기화 실패:', error)
     }
   },
+
+  // 결제 정보 저장
+  savePaymentInfo: (paymentInfo) => {
+    try {
+      localStorage.setItem('carecbt_payment_info', JSON.stringify(paymentInfo))
+      localStorage.setItem('carecbt_paid_user', 'true')
+      localStorage.setItem('carecbt_payment_expires_at', paymentInfo.expiresAt)
+    } catch (error) {
+      console.error('결제 정보 저장 실패:', error)
+    }
+  },
+
+  // 결제 정보 가져오기
+  getPaymentInfo: () => {
+    try {
+      const paymentInfo = localStorage.getItem('carecbt_payment_info')
+      const expiresAt = localStorage.getItem('carecbt_payment_expires_at')
+      const isPaidUser = localStorage.getItem('carecbt_paid_user') === 'true'
+
+      if (!paymentInfo || !expiresAt || !isPaidUser) {
+        return null
+      }
+
+      // 만료일 확인
+      const now = new Date()
+      const expireDate = new Date(expiresAt)
+
+      if (now > expireDate) {
+        // 만료됨 - 저장된 정보 삭제
+        storage.clearPaymentInfo()
+        return null
+      }
+
+      return JSON.parse(paymentInfo)
+    } catch (error) {
+      console.error('결제 정보 로드 실패:', error)
+      return null
+    }
+  },
+
+  // 결제 여부 확인 (3개월 유효)
+  isPaidUser: () => {
+    const paymentInfo = storage.getPaymentInfo()
+    return paymentInfo !== null
+  },
+
+  // 결제 정보 초기화
+  clearPaymentInfo: () => {
+    try {
+      localStorage.removeItem('carecbt_payment_info')
+      localStorage.removeItem('carecbt_paid_user')
+      localStorage.removeItem('carecbt_payment_expires_at')
+    } catch (error) {
+      console.error('결제 정보 초기화 실패:', error)
+    }
+  },
 }
 
