@@ -47,6 +47,7 @@ function ExamPage() {
         setAnswer(questionId, answer)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // questions가 로드된 후 인덱스 복구
@@ -57,7 +58,7 @@ function ExamPage() {
         setCurrentQuestionIndex(savedIndex)
       }
     }
-  }, [questions.length])
+  }, [questions.length, currentQuestionIndex, setCurrentQuestionIndex])
 
   // 시험 초기화 (attempt 생성 및 문항 로드)
   useEffect(() => {
@@ -97,7 +98,7 @@ function ExamPage() {
         setQuestions(questionList)
         storage.saveQuestions(questionList)
       } catch (err) {
-        console.error('시험 초기화 오류:', err)
+        logger.error('시험 초기화 오류:', err)
         setError('시험을 불러오는 중 오류가 발생했습니다.')
         // 백엔드가 없는 경우 mock 데이터 사용
         const isPaidExam = window.location.pathname.includes('/paid') || storage.isPaidUser()
@@ -126,7 +127,8 @@ function ExamPage() {
     if (!currentAttempt || questions.length === 0) {
       initializeExam()
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [examNumber])
 
   // 자동 저장 (5초마다) - 문항 이동 시에도 저장
   useEffect(() => {
@@ -141,9 +143,9 @@ function ExamPage() {
             currentQuestion.id,
             currentAnswer
           )
-          console.log('자동 저장 완료')
+          logger.log('자동 저장 완료')
         } catch (err) {
-          console.error('자동 저장 오류:', err)
+          logger.error('자동 저장 오류:', err)
           // 네트워크 오류 시 로컬 저장소는 이미 저장되어 있음
         }
       }, 5000)
@@ -180,7 +182,7 @@ function ExamPage() {
         optionNumber
       )
     } catch (err) {
-      console.error('답안 저장 오류:', err)
+      logger.error('답안 저장 오류:', err)
       // 네트워크 오류 시 로컬 저장소에만 저장 (answers useEffect에서 처리됨)
     }
   }
@@ -228,7 +230,7 @@ function ExamPage() {
       
       navigate(`/result/${currentAttempt.id}`)
     } catch (err) {
-      console.error('제출 오류:', err)
+      logger.error('제출 오류:', err)
       // 백엔드가 없는 경우에도 결과 페이지로 이동 (ResultPage에서 mock 데이터 사용)
       // 로컬 스토리지에 제출 상태 저장
       const submitData = {

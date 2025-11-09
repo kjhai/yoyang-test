@@ -7,6 +7,8 @@ const useExamStore = create((set) => ({
   currentQuestionIndex: 0,
   isSubmitted: false,
   score: null,
+  correct: null,
+  wrong: null,
 
   // 액션
   setCurrentAttempt: (attempt) => set({ currentAttempt: attempt }),
@@ -16,7 +18,13 @@ const useExamStore = create((set) => ({
       answers: { ...state.answers, [questionId]: answer },
     })),
   setCurrentQuestionIndex: (index) => set({ currentQuestionIndex: index }),
-  submitExam: (score) => set({ isSubmitted: true, score }),
+  submitExam: (score, correct, wrong) => 
+    set({ 
+      isSubmitted: true, 
+      score,
+      correct: correct ?? null,
+      wrong: wrong ?? null,
+    }),
   resetExam: () =>
     set({
       currentAttempt: null,
@@ -25,6 +33,8 @@ const useExamStore = create((set) => ({
       currentQuestionIndex: 0,
       isSubmitted: false,
       score: null,
+      correct: null,
+      wrong: null,
     }),
 }))
 
