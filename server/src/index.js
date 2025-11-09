@@ -11,7 +11,14 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 // 미들웨어
-app.use(cors())
+// CORS 설정: 프로덕션에서는 특정 도메인만 허용
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' && process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL
+    : '*', // 개발 환경 또는 FRONTEND_URL이 없으면 모든 도메인 허용
+  credentials: true,
+}
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -43,17 +50,6 @@ app.get('/healthz', async (req, res) => {
 
 // API 라우트
 app.use('/api', apiRoutes)
-
-// TODO: 실제 라우트 구현
-// import examsRoutes from './routes/exams.js'
-// import attemptsRoutes from './routes/attempts.js'
-// import answersRoutes from './routes/answers.js'
-// import adminRoutes from './routes/admin.js'
-//
-// app.use('/api/exams', examsRoutes)
-// app.use('/api/attempts', attemptsRoutes)
-// app.use('/api/answers', answersRoutes)
-// app.use('/api/admin', adminRoutes)
 
 // 404 핸들러
 app.use((req, res) => {

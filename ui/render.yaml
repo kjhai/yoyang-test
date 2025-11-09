@@ -1,0 +1,14 @@
+# 프런트엔드 Static Site 배포 설정 (별도 파일)
+# 참고: Render.com에서는 Static Site를 별도로 생성해야 합니다.
+
+# Static Site는 render.yaml을 지원하지 않으므로,
+# Render.com 대시보드에서 수동으로 생성해야 합니다.
+
+# 설정:
+# - Name: carecbt-web
+# - Environment: Static Site
+# - Build Command: npm install && npm run build
+# - Publish Directory: dist
+# - Environment Variables:
+#   - VITE_API_BASE_URL: https://carecbt-api.onrender.com/api
+

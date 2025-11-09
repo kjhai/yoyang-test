@@ -74,10 +74,15 @@ export const examAPI = {
     apiRequest(`/attempts/${attemptId}/wrong`),
 
   // 오답 모드에서 답변 수정
-  updateAnswer: (answerId) =>
+  updateAnswer: (answerId, chosenOption) =>
     apiRequest(`/answers/${answerId}/correct`, {
       method: 'POST',
+      body: { chosen_option: chosenOption },
     }),
+
+  // 해설 가져오기
+  getExplanations: (attemptId) =>
+    apiRequest(`/answers/attempt/${attemptId}/explanations`),
 }
 
 export const adminAPI = {

@@ -30,19 +30,33 @@ function ExplanationsPage() {
         setIsLoading(true)
         setError(null)
 
-        // API에서 문제 목록 가져오기
-        const questionsData = await examAPI.getAttemptQuestions(attemptId)
+        // API에서 해설 데이터 가져오기 (문제와 답안 포함)
+        const explanationsData = await examAPI.getExplanations(attemptId)
+        
+        // 해설 데이터를 문제 형식으로 변환
+        const questionsData = explanationsData.map((item) => ({
+          id: item.question_id,
+          question_id: item.question_identifier || item.question_id,
+          stem: item.stem,
+          opt1: item.opt1,
+          opt2: item.opt2,
+          opt3: item.opt3 || null,
+          opt4: item.opt4 || null,
+          opt5: item.opt5 || null,
+          answer: item.answer,
+          explanation: item.explanation,
+        }))
         setQuestions(questionsData)
 
-        // API에서 답안 가져오기
-        const resultData = await examAPI.getResult(attemptId)
-        if (resultData.answers) {
-          const answers = {}
-          resultData.answers.forEach((answer) => {
-            answers[answer.question_id] = answer.chosen_option
-          })
-          setUserAnswers(answers)
-        }
+        // 답안 정보 설정
+        const answers = {}
+        explanationsData.forEach((item) => {
+          const qId = item.question_id
+          if (item.chosen_option) {
+            answers[qId] = item.chosen_option
+          }
+        })
+        setUserAnswers(answers)
       } catch (err) {
         console.error('문제 로드 오류:', err)
         setError('문제를 불러오는 중 오류가 발생했습니다.')
@@ -295,4 +309,3 @@ function ExplanationsPage() {
 }
 
 export default ExplanationsPage
-

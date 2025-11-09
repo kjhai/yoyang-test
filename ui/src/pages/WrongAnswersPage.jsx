@@ -37,7 +37,8 @@ function WrongAnswersPage() {
 
         // API에서 오답 목록 가져오기
         const wrongAnswersData = await examAPI.getWrongAnswers(actualAttemptId)
-        const wrongQuestionsList = wrongAnswersData.questions || []
+        // API는 직접 배열을 반환
+        const wrongQuestionsList = Array.isArray(wrongAnswersData) ? wrongAnswersData : (wrongAnswersData.questions || [])
         setWrongQuestions(wrongQuestionsList)
         setInitialWrongCount(wrongQuestionsList.length)
         
@@ -45,7 +46,7 @@ function WrongAnswersPage() {
         const prevAnswers = {}
         wrongQuestionsList.forEach((q) => {
           if (q.chosen_option) {
-            prevAnswers[q.id] = q.chosen_option
+            prevAnswers[q.question_id] = q.chosen_option
           }
         })
         setPreviousAnswers(prevAnswers)
@@ -137,19 +138,31 @@ function WrongAnswersPage() {
       setShowFeedback(null)
       
       // 정답으로 변경했으므로 해당 문제 제거
+      // question_id 또는 id로 비교
+      const currentQuestionId = currentQuestion.question_id || currentQuestion.id
       const updatedWrongQuestions = wrongQuestions.filter(
-        (q) => q.id !== currentQuestion.id
+        (q) => (q.question_id || q.id) !== currentQuestionId
       )
       setWrongQuestions(updatedWrongQuestions)
 
       // 로컬 스토리지에 업데이트된 답안 저장
       const savedAnswers = storage.getAnswers()
-      savedAnswers[currentQuestion.id] = selectedAnswer
+      savedAnswers[currentQuestionId] = selectedAnswer
       storage.saveAnswers(savedAnswers)
+      
+      // 사용자 답안 상태 업데이트
+      setUserAnswers((prev) => ({
+        ...prev,
+        [currentQuestionId]: selectedAnswer,
+      }))
 
       // 서버에 답안 변경 저장 시도
       try {
-        await examAPI.updateAnswer(currentQuestion.id)
+        // answer_id는 백엔드에서 반환된 id 필드
+        const answerId = currentQuestion.id || currentQuestion.answer_id
+        if (answerId) {
+          await examAPI.updateAnswer(answerId, selectedAnswer)
+        }
       } catch (err) {
         console.error('답안 업데이트 오류:', err)
       }
@@ -175,9 +188,26 @@ function WrongAnswersPage() {
       }, 2000)
 
       // 로컬 스토리지에 업데이트된 답안 저장 (오답이지만 저장)
+      const currentQuestionId = currentQuestion.question_id || currentQuestion.id
       const savedAnswers = storage.getAnswers()
-      savedAnswers[currentQuestion.id] = selectedAnswer
+      savedAnswers[currentQuestionId] = selectedAnswer
       storage.saveAnswers(savedAnswers)
+      
+      // 사용자 답안 상태 업데이트
+      setUserAnswers((prev) => ({
+        ...prev,
+        [currentQuestionId]: selectedAnswer,
+      }))
+      
+      // 서버에 답안 변경 저장 시도
+      try {
+        const answerId = currentQuestion.id || currentQuestion.answer_id
+        if (answerId) {
+          await examAPI.updateAnswer(answerId, selectedAnswer)
+        }
+      } catch (err) {
+        console.error('답안 업데이트 오류:', err)
+      }
     }
   }
 

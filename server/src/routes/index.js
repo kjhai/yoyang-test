@@ -1,4 +1,8 @@
 import express from 'express'
+import examsRoutes from './exams.js'
+import attemptsRoutes from './attempts.js'
+import answersRoutes from './answers.js'
+import adminRoutes from './admin.js'
 
 const router = express.Router()
 
@@ -11,10 +15,15 @@ router.get('/', (req, res) => {
       exams: '/api/exams',
       attempts: '/api/attempts',
       answers: '/api/answers',
-      admin: '/api/admin'
-    }
+      admin: '/api/admin',
+    },
   })
 })
 
-export default router
+// 라우트 연결
+router.use('/exams', examsRoutes)
+router.use('/attempts', attemptsRoutes)
+router.use('/answers', answersRoutes)
+router.use('/admin', adminRoutes)
 
+export default router
